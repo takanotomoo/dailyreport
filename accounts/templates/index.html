@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if user.is_authenticated %}
+<div class="h1">日報</div>
+{% else %}
+<div class="h1">Main</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="h2">Welcome {{ user.first_name }} {{ user.last_name }}</div>
+<p>日報内容</p>
+<!-- 日報一覧の表示 -->
+{% for postdaily in postdailies %}
+    <a href="{% url 'accounts:detail' pk=postdaily.pk %}">{{ postdaily.title }}</a>
+    <br>
+{% endfor %}
+
+<br>
+<a href="{% url 'accounts:daily_report' %}" class="btn btn-primary">日報の入力</a>
+<br>
+<!-- ログアウトフォーム -->
+<form action="{% url 'accounts:logout' %}" method='post' name='logout'>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-link">Logout</button>
+</form>
+{% else %}
+<a href="{% url 'accounts:signup' %}" class="btn btn-primary">Signup</a>
+<a href="{% url 'accounts:login' %}" class="btn btn-primary">Login</a>
+{% endif %}
+{% endblock %}

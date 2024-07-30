@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<div class="h1">daily report</div>
+<div class="h1">投稿</div>
+{% endblock %}
+
+{% block content %}
+<div>
+  <div>
+    <br>
+    投稿内容の表示部分
+    <th>タイトル</th>
+    <th>{{ instance.title }}</th>
+
+    <form class="" action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" name="submit">Submit</button>
+    </form>
+  </div>
+  <div class="mt-3">
+    <a href="{% url 'accounts:index' %}" class="btn btn-secondary">Back</a>
+  </div>
+</div>
+{% endblock %}

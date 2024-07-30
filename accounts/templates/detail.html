@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+<div class="h1">詳細画面</div>
+{% endblock %}
+
+{% block content %}
+<div>
+  <div>
+    <br>
+    <!-- 投稿内容の表示部分 -->
+    <table>
+      <tr>
+        <th>タイトル</th>
+        <td>{{ instance.title }}</td>
+      </tr>
+      <tr>
+        <th>投稿日</th>
+        <td>{{ instance.created_at }}</td>
+      </tr>
+      <tr>
+        <th>投稿者</th>
+        <td>{{ instance.created_by }}</td>
+      </tr>
+      <tr>
+        <th>内容</th>
+        <td>{{ instance.description }}</td>
+      </tr>
+    </table>
+  </div>
+  <form action="{% url 'accounts:delete_post' pk=instance.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-3">削除</button>
+  </form>
+  <br>
+  <form action="{% url 'accounts:edit' pk=instance.pk %}" method="GET">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-4">変更</button>
+  </form>
+  <br>
+  <br>
+  <a href="{% url 'accounts:index' %}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}
