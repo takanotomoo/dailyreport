@@ -5,14 +5,12 @@ from django.contrib.auth.views import (
     LogoutView as BaseLogoutView,
 )
 from django.urls import reverse_lazy
-from .forms import SignUpForm, LoginFrom
+from .forms import SignUpForm, LoginForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import PostDaily
 from .forms import PostDailyForm
 from django.http import HttpResponseForbidden
-from .models import To_do
-from .forms import To_doForm
 
 
 class IndexView(TemplateView):
@@ -56,7 +54,7 @@ class SignupView(CreateView):
 
 # ログインビューを作成
 class LoginView(BaseLoginView):
-    form_class = LoginFrom
+    form_class = LoginForm
     template_name = "accounts/login.html"
 
 
@@ -72,7 +70,6 @@ def DailyView(request):
             days = form.cleaned_data["days"]
             # クエリセットを取得
             exists = PostDaily.objects.filter(days=days, created_by_id=request.user.id).exists()
-            print(exists)
 
             # クエリセットの長さを取得
             if not exists:
@@ -85,11 +82,10 @@ def DailyView(request):
                 return redirect("/")
             else:
                 # フォームにエラーメッセージを追加
-                # form.add_error(days, "指定された日付はすでに存在します。")
-                print("a")
-        else:
-            form = PostDailyForm()
-            return render(request, "daily_report.html", {"form": form})
+                form.add_error(None, "指定された日付はすでに存在します。")
+        return render(request, "daily_report.html", {"form": form})       
+    form = PostDailyForm()
+    return render(request, "daily_report.html", {"form": form})
 
 
 # 各詳細画面
@@ -124,16 +120,3 @@ def edit(request, pk):
         return render(request, "edit.html", {"form": form})
 
 
-def new(request):
-    if request.method == "POST":
-        form = To_doForm(request.POST)
-        if form.is_valid():
-            todo = To_do()
-            todo.deadline = form.cleaned_data["deadline"]
-            todo.task = form.cleaned_data["task"]
-            todo.created_by = request.user
-            todo.save()
-            return redirect("/")
-    else:
-        form = To_doForm()
-        return render(request, "new.html", {"form": form})

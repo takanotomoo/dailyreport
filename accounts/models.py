@@ -111,12 +111,3 @@ class PostDaily(models.Model):
 
     def __str__(self):
         return self.title
-
-
-# 仮作成 kesu 
-class To_do(models.Model):
-    deadline = models.DateField(verbose_name="期日", blank=False, null=False, default=timezone.now)
-    task = models.CharField(verbose_name="タスク名", blank=False, null=False, max_length=10)
-
-    def __str__(self):
-        return self.task
