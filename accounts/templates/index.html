@@ -14,13 +14,19 @@
 <p>日報内容</p>
 <!-- 日報一覧の表示 -->
 {% for postdaily in postdailies %}
-    <a href="{% url 'accounts:detail' pk=postdaily.pk %}">{{ postdaily.title }}</a>
-    <br>
+<a href="{% url 'accounts:detail' pk=postdaily.pk %}">{{ postdaily.title }}</a>
+<br>
 {% endfor %}
 
 <br>
 <a href="{% url 'accounts:daily_report' %}" class="btn btn-primary">日報の入力</a>
 <br>
+<br>
+<form action="{% url 'accounts:export_items_csv' %}" method='post'>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">CSV</button>
+</form>
+
 <!-- ログアウトフォーム -->
 <form action="{% url 'accounts:logout' %}" method='post' name='logout'>
     {% csrf_token %}

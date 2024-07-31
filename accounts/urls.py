@@ -14,4 +14,5 @@ urlpatterns = [
     path('detail/<int:pk>/', views.Detail, name="detail"),
     path('delete/<int:pk>/', views.delete_post, name='delete_post'),
     path('edit/<int:pk>/', views.edit, name="edit"),
+    path('csv/', views.export_items_csv, name='export_items_csv'),
 ]

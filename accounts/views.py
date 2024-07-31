@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import PostDaily
 from .forms import PostDailyForm
 from django.http import HttpResponseForbidden
+import csv
 
 
 class IndexView(TemplateView):
@@ -83,7 +84,7 @@ def DailyView(request):
             else:
                 # フォームにエラーメッセージを追加
                 form.add_error(None, "指定された日付はすでに存在します。")
-        return render(request, "daily_report.html", {"form": form})       
+        return render(request, "daily_report.html", {"form": form})      
     form = PostDailyForm()
     return render(request, "daily_report.html", {"form": form})
 
@@ -120,3 +121,22 @@ def edit(request, pk):
         return render(request, "edit.html", {"form": form})
 
 
+# csv出力
+def export_items_csv(request):
+    # HTTPレスポンスをCSVファイルとして設定
+    response = HttpResponse(content_type='/csv')
+    response['Content-Disposition'] = 'attachment; filename="items.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['title'])  # ヘッダー行
+
+    # データ行
+    items = PostDaily.objects.all()
+    for item in items:
+        writer.writerow([item.description])
+
+    return response
+
+
+# def export_items_csv(request):
+#    return HttpResponse("a")
